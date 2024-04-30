@@ -53,15 +53,20 @@ function Page() {
 		  try{
       if(isEncrypt)
         {
-          setOwnerName(CryptoJS.AES.encrypt(ownerName, password).toString());
-          setCarName(CryptoJS.AES.encrypt(carName, password).toString());
-          const regis = await contra.methods.registerCar(ownerName,carName,isEncrypt).send({ from: accounts[0], value: web3.utils.toWei('3', 'ether') }); // Send 3 ether along with the transaction
-
-        }
+          const _owner = CryptoJS.AES.encrypt(ownerName, password).toString()
+          const _carName = CryptoJS.AES.encrypt(carName, password).toString()
+          console.log("hey encryption")
+          setOwnerName(_owner);
+          setCarName(_carName);
+          console.log(ownerName, carName)
+          setTimeout(async () => {
+            const regis = await contra.methods.registerCar(_owner, _carName, isEncrypt)
+              .send({ from: accounts[0], value: web3.utils.toWei('0.07', 'ether') });
+            alert('Car registered');
+          }, 10000);        }
       else
       {
         const regis = await contra.methods.registerCar(ownerName,carName,isEncrypt).send({ from: accounts[0]});
-
       }
       alert('Car registered')
 		  }catch(e)

@@ -148,8 +148,8 @@ export default function Home() {
       </TableHeader>
       <TableBody>
           <TableRow>
-            <TableCell>{arr[num-1][1]}</TableCell>
-            <TableCell>{arr[num-1][2]}</TableCell>
+            <TableCell>{arr[num-1][1].substring(0, 5) + "..."}</TableCell>
+            <TableCell>{arr[num-1][2].substring(0, 5) + "..."}</TableCell>
             <TableCell >{arr[num-1][3] ? "Yes" : "No"}</TableCell>
       </TableRow>
       </TableBody>

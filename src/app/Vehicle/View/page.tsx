@@ -20,10 +20,12 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import CryptoJS from 'crypto-js';
 
 
 export default function TableDemo() {
@@ -42,6 +44,12 @@ export default function TableDemo() {
   const contractAddress = "0x3E4c97e8568fBD903Dc33f7154eD308Be1aB4212";
 
   const[arr, setArr] = useState([])
+
+  const[checker, setChecker] =useState(false)
+  const[userName,setUserName]=useState('')
+  const[carName,setCarName]=useState('')
+
+  const [password, setPassword] = useState('');
 
 
   useEffect(()=>{
@@ -99,6 +107,8 @@ export default function TableDemo() {
       contractAddress
       );
       try{
+          const _check = await contra.methods.checkEncryption(_id).call({ from: accounts[0]});
+          setChecker(_check);
           const _battery = await contra.methods.getBatteryService(_id).call({ from: accounts[0]});
           setBattery(_battery);
           const _engine = await contra.methods.getEngineService(_id).call({ from: accounts[0]});
@@ -116,6 +126,42 @@ export default function TableDemo() {
     }
   }
 }
+
+
+const decrypt= async(_id)=>{
+  if (typeof window !== "undefined") {
+    const win = window as WindowWithEthereum;
+    if (win.ethereum) {
+    await win.ethereum.enable();
+    const web3 = new Web3(win.ethereum);
+    setWeb3(web3);
+    const accounts = await web3.eth.getAccounts();
+    const contra = new web3.eth.Contract(
+    ABI,
+    contractAddress
+    );
+    try{
+        const dec = await contra.methods.decrypt(_id).send({ from: accounts[0], value: web3.utils.toWei('0.03', 'ether') });
+        const _car = await contra.methods.getCarByID(_id).call({ from: accounts[0]});
+        const _ownerBytes = CryptoJS.AES.decrypt(_car[1].toString(), password);
+        const _ownerName = _ownerBytes.toString(CryptoJS.enc.Utf8);
+        setUserName(_ownerName);
+        const _nameBytes = CryptoJS.AES.decrypt(_car[2].toString(), password);
+        const _carName = _nameBytes.toString(CryptoJS.enc.Utf8);
+        setCarName(_carName);
+        alert("Data Decrypted")
+      }
+    catch(e)
+    {
+    alert(e)
+    }
+  }
+}
+}
+
+const handlePasswordChange = (e) => {
+  setPassword(e.target.value);
+};
 
 
 
@@ -140,8 +186,8 @@ export default function TableDemo() {
           <TableRow key={index}>
             <TableCell>{index}</TableCell>
             <TableCell className="font-medium">{data[0].toString()}</TableCell>
-            <TableCell>{data[1]}</TableCell>
-            <TableCell>{data[2]}</TableCell>
+            <TableCell>{data[1].substring(0, 5) + "..."}</TableCell>
+            <TableCell>{data[2].substring(0, 5) + "..."}</TableCell>
             <TableCell >{data[3] ? "Yes" : "No"}</TableCell>
             <TableCell >
               <Dialog>
@@ -161,8 +207,8 @@ export default function TableDemo() {
       </TableHeader>
       <TableBody>
           <TableRow>
-            <TableCell>{arr[index][1]}</TableCell>
-            <TableCell>{arr[index][2]}</TableCell>
+            <TableCell>{userName? userName :arr[index][1].substring(0, 5) + "..." }</TableCell>
+            <TableCell>{carName? carName :arr[index][2].substring(0, 5) + "..."}</TableCell>
             <TableCell >{arr[index][3] ? "Yes" : "No"}</TableCell>
       </TableRow>
       </TableBody>
@@ -281,8 +327,17 @@ export default function TableDemo() {
     </Table>
       </DialogDescription>
     </DialogHeader>
-
+    <DialogFooter>
+      {
+        checker? <div><input  id="password"
+        type="password"
+        placeholder="Enter password"
+        value={password}
+        onChange={handlePasswordChange}></input><Button onClick={() => decrypt(data[0].toString())}>Decrypt</Button></div> : null
+      }
+</DialogFooter>
   </DialogContent>
+
 </Dialog></TableCell>
           </TableRow>
         ))}
