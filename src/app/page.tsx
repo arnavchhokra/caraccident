@@ -22,7 +22,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter
 } from "@/components/ui/dialog"
+import CryptoJS from 'crypto-js';
 
 
 export default function Home() {
@@ -34,8 +36,10 @@ export default function Home() {
   const [engine, setEngine] =useState([]);
   const [basic, setBasic] = useState([]);
   const [accident, setAccident] = useState([]);
+  const[checker, setChecker] =useState(false)
 
-  const contractAddress = "0x3E4c97e8568fBD903Dc33f7154eD308Be1aB4212";
+  const contractAddress = "0x4c304df050df16ee92ef5037290c10cd19f35128";
+
 
   const[arr, setArr] = useState([])
 
@@ -88,6 +92,8 @@ export default function Home() {
       contractAddress
       );
       try{
+          const _check = await contra.methods.checkEncryption(_id).call({ from: accounts[0]});
+          setChecker(_check);
           const _battery = await contra.methods.getBatteryService(_id).call({ from: accounts[0]});
           setBattery(_battery);
           const _engine = await contra.methods.getEngineService(_id).call({ from: accounts[0]});
@@ -106,10 +112,54 @@ export default function Home() {
   }
 }
 
+const[userName,setUserName]=useState('')
+const[carName,setCarName]=useState('')
+
+const [password, setPassword] = useState('');
+
+
+const decrypt= async(_id)=>{
+  if (typeof window !== "undefined") {
+    const win = window as WindowWithEthereum;
+    if (win.ethereum) {
+    await win.ethereum.enable();
+    const web3 = new Web3(win.ethereum);
+    setWeb3(web3);
+    const accounts = await web3.eth.getAccounts();
+    const contra = new web3.eth.Contract(
+    ABI,
+    contractAddress
+    );
+    try{
+        const dec = await contra.methods.decrypt(_id).send({ from: accounts[0], value: web3.utils.toWei('0.03', 'ether') });
+        const _car = await contra.methods.getCarByID(_id).call({ from: accounts[0]});
+        const _ownerBytes = CryptoJS.AES.decrypt(_car[1].toString(), password);
+        const _ownerName = _ownerBytes.toString(CryptoJS.enc.Utf8);
+        setUserName(_ownerName);
+        const _nameBytes = CryptoJS.AES.decrypt(_car[2].toString(), password);
+        const _carName = _nameBytes.toString(CryptoJS.enc.Utf8);
+        setCarName(_carName);
+        alert("Data Decrypted")
+      }
+    catch(e)
+    {
+    alert(e)
+    }
+  }
+}
+}
+
+const handlePasswordChange = (e) => {
+  setPassword(e.target.value);
+};
+
+
+
   return (
     <div>
       <Navbar />
       <div style={{paddingLeft:'10%', paddingRight:'10%', paddingTop:'30px'}} >
+    <h1 style={{fontSize:'20px', fontWeight:'600'}}>Public Records</h1>
     <Table style={{border:'1px solid lightgrey'}} >
       <TableHeader>
         <TableRow>
@@ -124,8 +174,8 @@ export default function Home() {
       {arr.map((data, index) => (
           <TableRow key={index}>
             <TableCell className="font-medium">{data[0].toString()}</TableCell>
-            <TableCell>{data[1]}</TableCell>
-            <TableCell>{data[2]}</TableCell>
+            <TableCell>{data[1].toString().substring(0, 10)}</TableCell>
+            <TableCell>{data[2].toString().substring(0, 10)}</TableCell>
             <TableCell >{data[3] ? "Yes" : "No"}</TableCell>
             <TableCell >
 
@@ -148,8 +198,8 @@ export default function Home() {
       </TableHeader>
       <TableBody>
           <TableRow>
-            <TableCell>{arr[num-1][1].substring(0, 5) + "..."}</TableCell>
-            <TableCell>{arr[num-1][2].substring(0, 5) + "..."}</TableCell>
+            <TableCell>{userName? userName :arr[num-1][1].substring(0, 10) }</TableCell>
+            <TableCell>{carName? carName :arr[num-1][2].substring(0, 10)}</TableCell>
             <TableCell >{arr[num-1][3] ? "Yes" : "No"}</TableCell>
       </TableRow>
       </TableBody>
@@ -267,7 +317,17 @@ export default function Home() {
       </TableBody>
     </Table>
       </DialogDescription>
+
     </DialogHeader>
+    <DialogFooter>
+      {
+        checker? <div><input  id="password"
+        type="password"
+        placeholder="Enter password"
+        value={password}
+        onChange={handlePasswordChange}></input><Button onClick={() => decrypt(data[0].toString())}>Decrypt</Button></div> : null
+      }
+</DialogFooter>
 
   </DialogContent>
 </Dialog></TableCell>

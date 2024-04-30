@@ -86,7 +86,7 @@ function Page() {
   const [web3, setWeb3] = useState<Web3 | null>(null);
 
 
-  const contractAddress = "0x3E4c97e8568fBD903Dc33f7154eD308Be1aB4212";
+  const contractAddress = "0x4c304df050df16ee92ef5037290c10cd19f35128";
 
 	  const transfer = async() =>{
 

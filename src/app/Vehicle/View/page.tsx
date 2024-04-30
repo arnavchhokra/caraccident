@@ -41,7 +41,7 @@ export default function TableDemo() {
   const [basic, setBasic] = useState([]);
   const [accident, setAccident] = useState([]);
 
-  const contractAddress = "0x3E4c97e8568fBD903Dc33f7154eD308Be1aB4212";
+  const contractAddress = "0x4c304df050df16ee92ef5037290c10cd19f35128";
 
   const[arr, setArr] = useState([])
 
@@ -186,8 +186,8 @@ const handlePasswordChange = (e) => {
           <TableRow key={index}>
             <TableCell>{index}</TableCell>
             <TableCell className="font-medium">{data[0].toString()}</TableCell>
-            <TableCell>{data[1].substring(0, 5) + "..."}</TableCell>
-            <TableCell>{data[2].substring(0, 5) + "..."}</TableCell>
+            <TableCell>{data[1].substring(0, 10)}</TableCell>
+            <TableCell>{data[2].substring(0, 10)}</TableCell>
             <TableCell >{data[3] ? "Yes" : "No"}</TableCell>
             <TableCell >
               <Dialog>
@@ -207,8 +207,8 @@ const handlePasswordChange = (e) => {
       </TableHeader>
       <TableBody>
           <TableRow>
-            <TableCell>{userName? userName :arr[index][1].substring(0, 5) + "..." }</TableCell>
-            <TableCell>{carName? carName :arr[index][2].substring(0, 5) + "..."}</TableCell>
+            <TableCell>{userName? userName :arr[index][1].substring(0, 10) }</TableCell>
+            <TableCell>{carName? carName :arr[index][2].substring(0, 10)}</TableCell>
             <TableCell >{arr[index][3] ? "Yes" : "No"}</TableCell>
       </TableRow>
       </TableBody>

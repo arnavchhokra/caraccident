@@ -72,7 +72,7 @@ function Navbar() {
 
 
 
-  const contractAddress = "0x3E4c97e8568fBD903Dc33f7154eD308Be1aB4212";
+  const contractAddress = "0x4c304df050df16ee92ef5037290c10cd19f35128";
 
 
   const connectWallet = async () => {
@@ -193,8 +193,8 @@ function Navbar() {
   return (
     <div>
 	<nav className="relative px-4 py-4 flex justify-between items-center bg-white">
-		<a className="text-3xl font-bold leading-none" href="#">
-			<h2>Logo</h2>
+		<a  style={{width:'200px'}} className="text-2xl font-bold" href="/">
+			<h3>Wagon Finder</h3>
 		</a>
 		<div className="lg:hidden">
 			<button className="navbar-burger flex items-center text-blue-600 p-3">
@@ -211,7 +211,7 @@ function Navbar() {
     <DropdownMenuSeparator />
     <DropdownMenuItem><a href = "/Vehicle/Register">Registration</a></DropdownMenuItem>
 	<DropdownMenuItem><a href = "/Vehicle/Transfer">Transfer</a></DropdownMenuItem>
-    <DropdownMenuItem><a href = "/Vehicle/View">View</a></DropdownMenuItem>
+    <DropdownMenuItem><a href = "/Vehicle/View">My Vehicles</a></DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu></li>
 			<li className="text-gray-300">
