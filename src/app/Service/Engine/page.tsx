@@ -20,6 +20,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import Web3 from 'web3';
+import ABI from "../../../ABI.json";
+
+
+
 function Page() {
   const [carID, setCarID] = useState(''); // State to track car ID value
   const [date, setDate] = useState(''); // State to track date value
@@ -45,6 +50,46 @@ function Page() {
   const handleEngineFixedChange = (value) => {
     setIsEngineFixed(value);
   };
+
+
+
+  const [web3, setWeb3] = useState<Web3 | null>(null);
+
+  const contractAddress = "0x3E4c97e8568fBD903Dc33f7154eD308Be1aB4212";
+
+
+	  const register = async() =>{
+
+		if (typeof window !== "undefined") {
+		  const win = window as WindowWithEthereum;
+		  if (win.ethereum) {
+		  await win.ethereum.enable();
+		  const web3 = new Web3(win.ethereum);
+		  setWeb3(web3);
+		  const accounts = await web3.eth.getAccounts();
+		  const contra = new web3.eth.Contract(
+			ABI,
+			contractAddress
+		  );
+		  try{
+        const regis = await contra.methods.setEngineService(carID, date, engineLevel, isEngineFixed).send({ from: accounts[0]});
+      alert('Engine registered')
+		  }catch(e)
+		  {
+			alert(e)
+		  }
+		}
+			}
+
+		else{
+			alert('Connect Metamask')
+		}
+
+	  }
+
+
+
+
 
   // Log every state
   useEffect(() => {
@@ -111,7 +156,7 @@ function Page() {
             </CardContent>
             <CardFooter className="flex justify-between">
               <Button variant="outline">Cancel</Button>
-              <Button>Register</Button>
+              <Button onClick={register}>Register</Button>
             </CardFooter>
           </Card>
         </div>

@@ -20,14 +20,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import Web3 from 'web3';
+import ABI from "../../../ABI.json";
+import CryptoJS from 'crypto-js';
+
+
+
+
 function Page() {
   const [isEncrypt, setIsEncrypt] = useState(false); // State to track encryption status
   const [password, setPassword] = useState(''); // State to track password value
   const [address, setAddress] = useState(''); // State to track address value
   const [personalID, setPersonalID] = useState(''); // State to track personal ID value
   const [carID, setCarID] = useState(''); // State to track car ID value
-
+  const [userName, setUserName] = useState(''); // State to track user name value
   // Handler to update encryption state
+  const handleUserNameChange = (e) =>{
+    setUserName(e.target.value)
+  }
+
   const handleEncrypt = (value) => {
     setIsEncrypt(value === "1");
   };
@@ -71,6 +82,42 @@ function Page() {
     return null;
   };
 
+
+  const [web3, setWeb3] = useState<Web3 | null>(null);
+
+
+  const contractAddress = "0x3E4c97e8568fBD903Dc33f7154eD308Be1aB4212";
+
+	  const transfer = async() =>{
+
+		if (typeof window !== "undefined") {
+		  const win = window as WindowWithEthereum;
+		  if (win.ethereum) {
+		  await win.ethereum.enable();
+		  const web3 = new Web3(win.ethereum);
+		  setWeb3(web3);
+		  const accounts = await web3.eth.getAccounts();
+		  const contra = new web3.eth.Contract(
+			ABI,
+			contractAddress
+		  );
+		  try{
+      const regis = await contra.methods.tranferCar(carID,personalID,address).send({ from: accounts[0]});
+      alert('Car tranferred')
+		  }catch(e)
+		  {
+			alert(e)
+		  }
+		}
+			}
+
+		else{
+			alert('Connect Metamask')
+		}
+
+
+	  }
+
   // Log every state
   useEffect(() => {
     console.log("isEncrypt:", isEncrypt);
@@ -78,7 +125,9 @@ function Page() {
     console.log("address:", address);
     console.log("personalID:", personalID);
     console.log("carID:", carID);
-  }, [isEncrypt, password, address, personalID, carID]);
+    console.log("userName:", userName);
+
+  }, [isEncrypt, password, address, personalID, carID, userName]);
 
   return (
     <div>
@@ -120,25 +169,12 @@ function Page() {
                       onChange={handleCarIDChange}
                     />
                   </div>
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="encrypt">Was Encrypted?</Label>
-                    <Select onValueChange={handleEncrypt}>
-                      <SelectTrigger id="encrypt">
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                      <SelectContent position="popper">
-                        <SelectItem value="1">Yes</SelectItem>
-                        <SelectItem value="0">No</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  {renderPasswordInput()} {/* Render password input based on encryption status */}
                 </div>
               </form>
             </CardContent>
             <CardFooter className="flex justify-between">
               <Button variant="outline">Cancel</Button>
-              <Button>Transfer</Button>
+              <Button onClick={transfer}>Transfer</Button>
             </CardFooter>
           </Card>
         </div>

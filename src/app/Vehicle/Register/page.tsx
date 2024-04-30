@@ -20,12 +20,74 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { LucideScissorsSquareDashedBottom } from 'lucide-react';
+import Web3 from 'web3';
+import ABI from "../../../ABI.json";
+import CryptoJS from 'crypto-js';
+
 
 function Page() {
   const [isEncrypt, setIsEncrypt] = useState(false); // State to track encryption status
   const [password, setPassword] = useState(''); // State to track password value
   const [ownerName, setOwnerName] = useState(''); // State to track owner name value
   const [carName, setCarName] = useState(''); // State to track car name value
+
+
+	const [web3, setWeb3] = useState<Web3 | null>(null);
+
+  const contractAddress = "0x3E4c97e8568fBD903Dc33f7154eD308Be1aB4212";
+
+
+	  const register = async() =>{
+
+		if (typeof window !== "undefined") {
+		  const win = window as WindowWithEthereum;
+		  if (win.ethereum) {
+		  await win.ethereum.enable();
+		  const web3 = new Web3(win.ethereum);
+		  setWeb3(web3);
+		  const accounts = await web3.eth.getAccounts();
+		  const contra = new web3.eth.Contract(
+			ABI,
+			contractAddress
+		  );
+		  try{
+      if(isEncrypt)
+        {
+          setOwnerName(CryptoJS.AES.encrypt(ownerName, password).toString());
+          setCarName(CryptoJS.AES.encrypt(carName, password).toString());
+          const regis = await contra.methods.registerCar(ownerName,carName,isEncrypt).send({ from: accounts[0], value: web3.utils.toWei('3', 'ether') }); // Send 3 ether along with the transaction
+
+        }
+      else
+      {
+        const regis = await contra.methods.registerCar(ownerName,carName,isEncrypt).send({ from: accounts[0]});
+
+      }
+      alert('Car registered')
+		  }catch(e)
+		  {
+			alert(e)
+		  }
+		}
+			}
+
+		else{
+			alert('Connect Metamask')
+		}
+
+
+	  }
+
+	const renderLogin = async()=>
+	{
+		console.log("hello user")
+	}
+
+
+
+
+
+
 
   // Handler to update encryption state
   const handleEncrypt = (value) => {
@@ -72,6 +134,11 @@ function Page() {
     console.log("ownerName",ownerName)
     console.log("carName", carName) // Log isEncrypt value to check if it changes
   },[isEncrypt, password, ownerName, carName]);
+
+  function submit()
+  {
+
+  }
 
   return (
     <div>
@@ -122,7 +189,7 @@ function Page() {
             </CardContent>
             <CardFooter className="flex justify-between">
               <Button variant="outline">Cancel</Button>
-              <Button>Register</Button>
+              <Button onClick={register}>Register</Button>
             </CardFooter>
           </Card>
         </div>

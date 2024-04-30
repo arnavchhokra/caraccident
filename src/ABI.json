@@ -1,0 +1,569 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_password",
+				"type": "string"
+			}
+		],
+		"name": "approveProvider",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "blacklistProvider",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_carID",
+				"type": "uint256"
+			}
+		],
+		"name": "decrypt",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_carId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_accidentDate",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_partsBroken",
+				"type": "string"
+			}
+		],
+		"name": "registerAccident",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_ownerName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_carName",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "_isEncrypted",
+				"type": "bool"
+			}
+		],
+		"name": "registerCar",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_userName",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "no",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_emergency",
+				"type": "string"
+			}
+		],
+		"name": "registerUser",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_password",
+				"type": "string"
+			}
+		],
+		"name": "setApprovalPassword",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_carId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_serviceDate",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_level",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_partsFixed",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "_isDriveable",
+				"type": "bool"
+			},
+			{
+				"internalType": "string",
+				"name": "_explainService",
+				"type": "string"
+			}
+		],
+		"name": "setBasicService",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_carId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_date",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_level",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "_isfixed",
+				"type": "bool"
+			}
+		],
+		"name": "setBatteryService",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_carId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_serviceDate",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_level",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "_isfixed",
+				"type": "bool"
+			}
+		],
+		"name": "setEngineService",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_ID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_personalID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_newOwner",
+				"type": "address"
+			}
+		],
+		"name": "tranferCar",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "withdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_carId",
+				"type": "uint256"
+			}
+		],
+		"name": "checkEncryption",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "checkUser",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_carId",
+				"type": "uint256"
+			}
+		],
+		"name": "getAccidentHistory",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "accidentDate",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "partsBroken",
+						"type": "string"
+					}
+				],
+				"internalType": "struct carAccident.Accident[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAllCars",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "carID",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "ownerName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "carName",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "isEncrypted",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct carAccident.Car[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_carId",
+				"type": "uint256"
+			}
+		],
+		"name": "getBatteryService",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "serviceDate",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "batteryScale",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "isFixed",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct carAccident.Battery[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_ID",
+				"type": "uint256"
+			}
+		],
+		"name": "getCarByID",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "carID",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "ownerName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "carName",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "isEncrypted",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct carAccident.Car",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCarsByAddress",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "carID",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "ownerName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "carName",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "isEncrypted",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct carAccident.Car[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_carId",
+				"type": "uint256"
+			}
+		],
+		"name": "getEngineService",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "serviceDate",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "engineScale",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "isFixed",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct carAccident.Engine[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_carId",
+				"type": "uint256"
+			}
+		],
+		"name": "getServiceHistory",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "serviceDate",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "serviceScale",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "partsServiced",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "isDrivable",
+						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "explainService",
+						"type": "string"
+					}
+				],
+				"internalType": "struct carAccident.Service[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]

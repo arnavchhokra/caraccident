@@ -19,6 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Web3 from 'web3';
+import ABI from "../../../ABI.json";
 
 function Page() {
   const [carID, setCarID] = useState(''); // State to track car ID value
@@ -26,6 +28,8 @@ function Page() {
   const [serviceLevel, setServiceLevel] = useState(''); // State to track service level value
   const [arePartsFixed, setArePartsFixed] = useState(''); // State to track if parts are fixed
   const [isCarDriveable, setIsCarDriveable] = useState(''); // State to track if car is driveable
+  const [serviceExplain, setServiceExplain] = useState(''); // State to track service explain
+
 
   // Inline function to update car ID state
   const handleCarIDChange = (e) => {
@@ -52,6 +56,45 @@ function Page() {
     setIsCarDriveable(value);
   };
 
+  const handleServiceExplain= (e) => {
+    setServiceExplain(e.target.value);
+  };
+
+  const [web3, setWeb3] = useState<Web3 | null>(null);
+
+  const contractAddress = "0x3E4c97e8568fBD903Dc33f7154eD308Be1aB4212";
+
+
+	  const register = async() =>{
+
+		if (typeof window !== "undefined") {
+		  const win = window as WindowWithEthereum;
+		  if (win.ethereum) {
+		  await win.ethereum.enable();
+		  const web3 = new Web3(win.ethereum);
+		  setWeb3(web3);
+		  const accounts = await web3.eth.getAccounts();
+		  const contra = new web3.eth.Contract(
+			ABI,
+			contractAddress
+		  );
+		  try{
+        const regis = await contra.methods.setBasicService(carID, serviceDate, serviceLevel, arePartsFixed, isCarDriveable, serviceExplain).send({ from: accounts[0]});
+      alert('Service registered')
+		  }catch(e)
+		  {
+			alert(e)
+		  }
+		}
+			}
+
+		else{
+			alert('Connect Metamask')
+		}
+
+
+	  }
+
   // Log every state
   useEffect(() => {
     console.log("carID:", carID);
@@ -59,13 +102,14 @@ function Page() {
     console.log("serviceLevel:", serviceLevel);
     console.log("arePartsFixed:", arePartsFixed);
     console.log("isCarDriveable:", isCarDriveable);
-  }, [carID, serviceDate, serviceLevel, arePartsFixed, isCarDriveable]);
+    console.log("serviceExplain:", serviceExplain);
+  }, [carID, serviceDate, serviceLevel, arePartsFixed, isCarDriveable, serviceExplain]);
 
   return (
     <div>
       <Navbar />
       <div style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-        <div style ={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'left', height:'80vh', width:'330px', gap:'10px', }}>
+        <div style ={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'left', height:'90vh', width:'330px', gap:'10px', }}>
           <Card className="w-[350px]  items-center">
             <CardHeader>
               <CardTitle>Service Car</CardTitle>
@@ -125,12 +169,21 @@ function Page() {
                       </SelectContent>
                     </Select>
                   </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="serviceDate">Service Explain</Label>
+                    <textarea className='h-40'
+                      id="serviceExplain"
+                      placeholder="Explain Service"
+                      value={serviceExplain}
+                      onChange={handleServiceExplain}
+                    />
+                  </div>
                 </div>
               </form>
             </CardContent>
             <CardFooter className="flex justify-between">
               <Button variant="outline">Cancel</Button>
-              <Button>Register</Button>
+              <Button onClick={register}>Register</Button>
             </CardFooter>
           </Card>
         </div>

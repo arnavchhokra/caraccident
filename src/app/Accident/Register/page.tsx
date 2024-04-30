@@ -13,6 +13,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import Web3 from 'web3';
+import ABI from "../../../ABI.json";
+
+
+
 function Page() {
   const [vehicleID, setVehicleID] = useState(''); // State to track vehicle ID value
   const [accidentDate, setAccidentDate] = useState(''); // State to track accident date value
@@ -32,6 +37,45 @@ function Page() {
   const handleDamageChange = (e) => {
     setDamage(e.target.value);
   };
+
+
+
+  const [web3, setWeb3] = useState<Web3 | null>(null);
+
+  const contractAddress = "0x3E4c97e8568fBD903Dc33f7154eD308Be1aB4212";
+
+
+	  const register = async() =>{
+
+		if (typeof window !== "undefined") {
+		  const win = window as WindowWithEthereum;
+		  if (win.ethereum) {
+		  await win.ethereum.enable();
+		  const web3 = new Web3(win.ethereum);
+		  setWeb3(web3);
+		  const accounts = await web3.eth.getAccounts();
+		  const contra = new web3.eth.Contract(
+			ABI,
+			contractAddress
+		  );
+		  try{
+        const regis = await contra.methods.registerAccident(vehicleID, accidentDate, damage).send({ from: accounts[0]});
+      alert('Accident registered')
+		  }catch(e)
+		  {
+			alert(e)
+		  }
+		}
+			}
+
+		else{
+			alert('Connect Metamask')
+		}
+
+	  }
+
+
+
 
   // Log every state
   useEffect(() => {
@@ -73,7 +117,8 @@ function Page() {
                   </div>
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="damage">Damage</Label>
-                    <Input
+                    <textarea
+                    className="h-60 p-2 "
                       id="damage"
                       placeholder="Describe parts broken / damage"
                       value={damage}
@@ -85,7 +130,7 @@ function Page() {
             </CardContent>
             <CardFooter className="flex justify-between">
               <Button variant="outline">Cancel</Button>
-              <Button>Register</Button>
+              <Button onClick={register}>Register</Button>
             </CardFooter>
           </Card>
         </div>

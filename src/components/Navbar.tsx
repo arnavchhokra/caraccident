@@ -1,3 +1,5 @@
+"use client"
+import { useState, useEffect } from 'react'
 import React from 'react'
 import {
 	DropdownMenu,
@@ -8,7 +10,186 @@ import {
 	DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
 
+  import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+  } from "@/components/ui/dialog"
+
+import Web3 from 'web3';
+import ABI from "../ABI.json"
+
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+interface WindowWithEthereum extends Window {
+	ethereum?: any;
+  }
+
+
 function Navbar() {
+
+	const [address, setaddress] = useState("");
+	const [web3, setWeb3] = useState<Web3 | null>(null);
+	const [contract, setContract] = useState<any | null>(null);
+	const [checker,setChecker] = useState(false);
+	const [loginText, setLoginText] = useState("Signup");
+	const [connectText,setConnectText] = useState("Connect Wallet");
+
+
+	const [userName, setUserName] = useState("");
+  const [userType, setUserType] = useState(1);
+  const [emergencyContact, setEmergencyContact] = useState("");
+  const [carID, setCarID] = useState(''); // State to track car ID value
+
+
+  const handleCarIDChange = (e) => {
+    setCarID(e.target.value);
+  };
+
+  const handleUserNameChange = (event: { target: { value: React.SetStateAction<string> } }) => {
+    setUserName(event.target.value);
+  };
+
+  const handleUserTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	setUserType(Number(event.target.value));
+  };
+
+  const handleEmergencyContactChange = (event: { target: { value: React.SetStateAction<string> } }) => {
+    setEmergencyContact(event.target.value);
+  };
+
+  useEffect(()=>{
+	console.log("userName:", userName, "emergencyContact:", emergencyContact, "userType:", userType, "carID", carID)
+  },[userName,userType,emergencyContact, carID])
+
+
+
+
+  const contractAddress = "0x3E4c97e8568fBD903Dc33f7154eD308Be1aB4212";
+
+
+  const connectWallet = async () => {
+	if (typeof window !== "undefined") {
+	  const win = window as WindowWithEthereum;
+	  if (win.ethereum) {
+	  await win.ethereum.enable();
+	  const web3 = new Web3(win.ethereum);
+	  setWeb3(web3);
+	  const accounts = await web3.eth.getAccounts();
+	  setaddress(accounts[0]);
+	  const contra = new web3.eth.Contract(
+		ABI,
+		contractAddress
+	  );
+	  setContract(contra);
+	setConnectText(accounts[0].length > 3 ? accounts[0].substring(0, 3) + '...' : accounts[0]);
+			console.log("CHECK WIGHT")
+		}
+	} else {
+	  alert("Please install MetaMask to use this application");
+	}
+  };
+
+	const connectToWeb3 = async () => {
+		if (typeof window !== "undefined") {
+		  const win = window as WindowWithEthereum;
+		  if (win.ethereum) {
+		  await win.ethereum.enable();
+		  const web3 = new Web3(win.ethereum);
+		  setWeb3(web3);
+		  const accounts = await web3.eth.getAccounts();
+		  setaddress(accounts[0]);
+		  const contra = new web3.eth.Contract(
+			ABI,
+			contractAddress
+		  );
+		  setContract(contra);
+		const check = await contra.methods
+		.checkUser()
+		.call({ from: accounts[0] });
+		console.log(check);
+
+		if(!check)
+			{
+				setChecker(false);
+				console.log("CHECK WONG")
+			}
+		else if(check)
+			{
+				setChecker(true);
+				setLoginText(accounts[0].length > 3 ? accounts[0].substring(0, 3) + '...' : accounts[0]);
+				setConnectText(accounts[0].length > 3 ? accounts[0].substring(0, 3) + '...' : accounts[0]);
+				console.log("CHECK WIGHT")
+			}
+		  } else {
+            console.log("WONG");
+          }
+		} else {
+		  alert("Please install MetaMask to use this application");
+		}
+	  };
+
+	  const signup = async() =>{
+
+		if (typeof window !== "undefined") {
+		  const win = window as WindowWithEthereum;
+		  if (win.ethereum) {
+		  await win.ethereum.enable();
+		  const web3 = new Web3(win.ethereum);
+		  setWeb3(web3);
+		  const accounts = await web3.eth.getAccounts();
+		  const contra = new web3.eth.Contract(
+			ABI,
+			contractAddress
+		  );
+		  if(userType ==1)
+			{
+		  try{
+			const regis = await contra.methods
+			.registerUser(userName,userType,emergencyContact)
+			.send({ from: accounts[0] });
+			alert("User Registered");
+		  }catch(e)
+		  {
+			alert(e)
+		  }
+		}
+		else
+		{
+			try{
+				const regis = await contra.methods
+				.registerUser(userName,userType,emergencyContact)
+				.send({ from: accounts[0] });
+				const valid = await contra.methods.approveProvider(carID).send({ from: accounts[0]});
+				alert(" user Registered and Validated");
+			  }catch(e)
+			  {
+				alert(e)
+			  }
+		}
+		}
+			}
+
+		else{
+			alert('Connect Metamask')
+		}
+
+
+	  }
+
+	const renderLogin = async()=>
+	{
+		await connectToWeb3();
+		console.log("hello user")
+	}
+
   return (
     <div>
 	<nav className="relative px-4 py-4 flex justify-between items-center bg-white">
@@ -42,10 +223,9 @@ function Navbar() {
   <DropdownMenuTrigger className="text-sm text-gray-400 hover:text-gray-500">Service</DropdownMenuTrigger>
   <DropdownMenuContent>
     <DropdownMenuSeparator />
-    <DropdownMenuItem><a href = "/Service/Battery">Battery Service </a></DropdownMenuItem>
-    <DropdownMenuItem><a href = "/Service/Engine">Engine Service </a></DropdownMenuItem>
+    <DropdownMenuItem><a href = "/Service/Battery">Service Battery</a></DropdownMenuItem>
+    <DropdownMenuItem><a href = "/Service/Engine">Service Engine</a></DropdownMenuItem>
 	<DropdownMenuItem><a href = "/Service/Basic">Basic Service </a></DropdownMenuItem>
-	<DropdownMenuItem><a href = "/Service/View">Services History</a></DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu></li>			<li className="text-gray-300">
 				<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" className="w-4 h-4 current-fill" viewBox="0 0 24 24">
@@ -57,12 +237,84 @@ function Navbar() {
   <DropdownMenuContent>
     <DropdownMenuSeparator />
     <DropdownMenuItem><a href = "/Accident/Register">Register Accident </a></DropdownMenuItem>
-	<DropdownMenuItem><a href = "/Accident/View">Accident History </a></DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu></li>
 		</ul>
-		<a className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" href="#">Sign in</a>
+		<div style={{width:'100vw', display:'flex', justifyContent:'flex-end', marginRight:'10px'}}>
+		<button  className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" onClick={connectWallet}>{connectText}</button>
+		</div>
+		<Dialog>
+		<DialogTrigger><a className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" onClick={renderLogin}>{loginText}</a>
+		</DialogTrigger>
+					{
+				checker? <DialogContent>
+					<DialogHeader>
+                        <DialogTitle>Welcome Back</DialogTitle>
+						<DialogDescription>
+				Perform vital operations in one click
+      </DialogDescription>
+                    </DialogHeader>
+					</DialogContent> : <DialogContent>
+					<DialogHeader>
+                        <DialogTitle>Signup</DialogTitle>
+						<DialogDescription>
+						<div className="flex flex-col space-y-1.5 mb-2">
+                    <Label htmlFor="vehicleID">Name</Label>
+                    <Input
+                       id="userName"
+					   type="text"
+					   placeholder="Name of the user"
+					   value={userName}
+					   onChange={handleUserNameChange}
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-1.5 mb-2">
+    <Label htmlFor="accidentDate">Type</Label>
+    <select
+        id="userType"
+        value={userType}
+        onChange={handleUserTypeChange}
+        className="border border-gray-300 rounded-md p-1 "
+    >
+        <option value={1}>Owner</option>
+        <option value={2}>Garage</option>
+        <option value={3}>Accident Resolution Center</option>
+    </select>
+</div>
+                  <div className="flex flex-col space-y-1.5 mb-2">
+                    <Label htmlFor="damage">Emergency Contact</Label>
+                    <Input
+                      id="emergencyContact"
+					  type="text"
+					  placeholder="Emergency contact of the user"
+					  value={emergencyContact}
+					  onChange={handleEmergencyContactChange}
+                    />
+                  </div>
+				  {
+					userType==2 || userType==3?
+					<div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="damage">Approval Password</Label>
+                    <Input
+                      id="approvalPassword"
+					  type="text"
+					  placeholder="Approval Password by the owner"
+					  value={carID}
+                      onChange={handleCarIDChange}
+                    />
+                  </div>:
+				  <div></div>
+				  }
+      </DialogDescription>
+                    </DialogHeader>
+					<DialogFooter>
+					<Button onClick={signup}>Register</Button>
+					</DialogFooter>
+					</DialogContent>
+			}
+</Dialog>
 	</nav>
+
 	<div className="navbar-menu relative z-50 hidden">
 		<div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25"></div>
 		<nav className="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white border-r overflow-y-auto">
@@ -99,7 +351,7 @@ function Navbar() {
 			</div>
 			<div className="mt-auto">
 				<div className="pt-6">
-					<a className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100 rounded-xl" href="#">Sign in</a>
+					<button className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100 rounded-xl"  onClick={renderLogin}>Sign up</button>
 				</div>
 				<p className="my-4 text-xs text-center text-gray-400">
 					<span>Copyright © 2021</span>
