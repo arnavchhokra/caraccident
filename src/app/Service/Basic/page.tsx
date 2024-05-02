@@ -23,6 +23,10 @@ import Web3 from 'web3';
 import ABI from "../../../ABI.json";
 
 function Page() {
+  interface WindowWithEthereum extends Window {
+    ethereum?: any;
+    }
+
   const [carID, setCarID] = useState(''); // State to track car ID value
   const [serviceDate, setServiceDate] = useState(''); // State to track service date value
   const [serviceLevel, setServiceLevel] = useState(''); // State to track service level value
@@ -32,31 +36,31 @@ function Page() {
 
 
   // Inline function to update car ID state
-  const handleCarIDChange = (e) => {
+  const handleCarIDChange = (e:any) => {
     setCarID(e.target.value);
   };
 
   // Inline function to update service date state
-  const handleServiceDateChange = (e) => {
+  const handleServiceDateChange = (e:any) => {
     setServiceDate(e.target.value);
   };
 
   // Inline function to update service level state
-  const handleServiceLevelChange = (e) => {
+  const handleServiceLevelChange = (e:any) => {
     setServiceLevel(e.target.value);
   };
 
   // Inline function to update parts fixed state
-  const handlePartsFixedChange = (value) => {
+  const handlePartsFixedChange = (value:any) => {
     setArePartsFixed(value);
   };
 
   // Inline function to update car driveable state
-  const handleCarDriveableChange = (value) => {
+  const handleCarDriveableChange = (value:any) => {
     setIsCarDriveable(value);
   };
 
-  const handleServiceExplain= (e) => {
+  const handleServiceExplain= (e:any) => {
     setServiceExplain(e.target.value);
   };
 

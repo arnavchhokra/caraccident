@@ -28,6 +28,10 @@ import CryptoJS from 'crypto-js';
 
 
 function Page() {
+  interface WindowWithEthereum extends Window {
+    ethereum?: any;
+    }
+
   const [isEncrypt, setIsEncrypt] = useState(false); // State to track encryption status
   const [password, setPassword] = useState(''); // State to track password value
   const [address, setAddress] = useState(''); // State to track address value
@@ -35,31 +39,31 @@ function Page() {
   const [carID, setCarID] = useState(''); // State to track car ID value
   const [userName, setUserName] = useState(''); // State to track user name value
   // Handler to update encryption state
-  const handleUserNameChange = (e) =>{
+  const handleUserNameChange = (e:any) =>{
     setUserName(e.target.value)
   }
 
-  const handleEncrypt = (value) => {
+  const handleEncrypt = (value:any) => {
     setIsEncrypt(value === "1");
   };
 
   // Inline function to update password state
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e:any) => {
     setPassword(e.target.value);
   };
 
   // Inline function to update address state
-  const handleAddressChange = (e) => {
+  const handleAddressChange = (e:any) => {
     setAddress(e.target.value);
   };
 
   // Inline function to update personal ID state
-  const handlePersonalIDChange = (e) => {
+  const handlePersonalIDChange = (e:any) => {
     setPersonalID(e.target.value);
   };
 
   // Inline function to update car ID state
-  const handleCarIDChange = (e) => {
+  const handleCarIDChange = (e:any) => {
     setCarID(e.target.value);
   };
 

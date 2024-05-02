@@ -30,7 +30,9 @@ import CryptoJS from 'crypto-js';
 
 export default function TableDemo() {
 
-
+  interface WindowWithEthereum extends Window {
+    ethereum?: any;
+    }
 
   const [web3, setWeb3] = useState<Web3 | null>(null);
 
@@ -43,7 +45,7 @@ export default function TableDemo() {
 
   const contractAddress = "0x4c304df050df16ee92ef5037290c10cd19f35128";
 
-  const[arr, setArr] = useState([])
+  const [arr, setArr] = useState<string[][]>([]);
 
   const[checker, setChecker] =useState(false)
   const[userName,setUserName]=useState('')
@@ -66,14 +68,10 @@ export default function TableDemo() {
         contractAddress
         );
         try{
-
-
             const obj = await contra.methods.getCarsByAddress().call({ from: accounts[0]});
             console.log(obj)
-            setArr(obj);
-
-
-        }catch(e)
+            setArr(obj as any);
+         }catch(e)
         {
         alert(e)
         }
@@ -92,7 +90,7 @@ export default function TableDemo() {
 
 
 
-  const getDetails = async(_id) =>{
+  const getDetails = async(_id: any) =>{
     console.log(_id)
     setNum(_id);
     if (typeof window !== "undefined") {
@@ -107,16 +105,16 @@ export default function TableDemo() {
       contractAddress
       );
       try{
-          const _check = await contra.methods.checkEncryption(_id).call({ from: accounts[0]});
+          const _check:any = await contra.methods.checkEncryption(_id).call({ from: accounts[0]});
           setChecker(_check);
-          const _battery = await contra.methods.getBatteryService(_id).call({ from: accounts[0]});
+          const _battery:any = await contra.methods.getBatteryService(_id).call({ from: accounts[0]});
           setBattery(_battery);
-          const _engine = await contra.methods.getEngineService(_id).call({ from: accounts[0]});
+          const _engine:any = await contra.methods.getEngineService(_id).call({ from: accounts[0]});
           setEngine(_engine);
-          const _basic = await contra.methods.getServiceHistory(_id).call({ from: accounts[0]});
+          const _basic:any = await contra.methods.getServiceHistory(_id).call({ from: accounts[0]});
           setBasic(_basic);
           console.log(_battery, _engine, _basic)
-          const _accident = await contra.methods.getAccidentHistory(_id).call({ from: accounts[0]});
+          const _accident:any = await contra.methods.getAccidentHistory(_id).call({ from: accounts[0]});
           setAccident(_accident);
           }
       catch(e)
@@ -128,7 +126,7 @@ export default function TableDemo() {
 }
 
 
-const decrypt= async(_id)=>{
+const decrypt= async(_id: string)=>{
   if (typeof window !== "undefined") {
     const win = window as WindowWithEthereum;
     if (win.ethereum) {
@@ -142,7 +140,7 @@ const decrypt= async(_id)=>{
     );
     try{
         const dec = await contra.methods.decrypt(_id).send({ from: accounts[0], value: web3.utils.toWei('0.03', 'ether') });
-        const _car = await contra.methods.getCarByID(_id).call({ from: accounts[0]});
+        const _car: any[] = await contra.methods.getCarByID(_id).call({ from: accounts[0]});
         const _ownerBytes = CryptoJS.AES.decrypt(_car[1].toString(), password);
         const _ownerName = _ownerBytes.toString(CryptoJS.enc.Utf8);
         setUserName(_ownerName);
@@ -159,7 +157,7 @@ const decrypt= async(_id)=>{
 }
 }
 
-const handlePasswordChange = (e) => {
+const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   setPassword(e.target.value);
 };
 
@@ -182,7 +180,7 @@ const handlePasswordChange = (e) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-      {arr.map((data, index) => (
+      {arr.map((data:any, index) => (
           <TableRow key={index}>
             <TableCell>{index}</TableCell>
             <TableCell className="font-medium">{data[0].toString()}</TableCell>
@@ -229,7 +227,7 @@ const handlePasswordChange = (e) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-      {battery.map((data, index) => (
+      {battery.map((data: any, index) => (
           <TableRow key={index}>
             <TableCell className="font-medium">{index}</TableCell>
             <TableCell>{data[0]}</TableCell>
@@ -258,7 +256,7 @@ const handlePasswordChange = (e) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-      {engine.map((data, index) => (
+      {engine.map((data:any, index) => (
           <TableRow key={index}>
             <TableCell className="font-medium">{index}</TableCell>
             <TableCell>{data[0]}</TableCell>
@@ -289,7 +287,7 @@ const handlePasswordChange = (e) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-      {basic.map((data, index) => (
+      {basic.map((data:any, index) => (
           <TableRow key={index}>
             <TableCell className="font-medium">{index}</TableCell>
             <TableCell>{data[0]}</TableCell>
@@ -316,7 +314,7 @@ const handlePasswordChange = (e) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-      {accident.map((data, index) => (
+      {accident.map((data:any, index) => (
           <TableRow key={index}>
             <TableCell className="font-medium">{index}</TableCell>
             <TableCell>{data[0]}</TableCell>

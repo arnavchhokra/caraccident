@@ -26,28 +26,33 @@ import ABI from "../../../ABI.json";
 
 
 function Page() {
+
+  interface WindowWithEthereum extends Window {
+    ethereum?: any;
+    }
+
   const [carID, setCarID] = useState(''); // State to track car ID value
   const [date, setDate] = useState(''); // State to track date value
   const [engineLevel, setEngineLevel] = useState(''); // State to track engine level value
   const [isEngineFixed, setIsEngineFixed] = useState(''); // State to track engine fixed status
 
   // Inline function to update car ID state
-  const handleCarIDChange = (e) => {
+  const handleCarIDChange = (e:any) => {
     setCarID(e.target.value);
   };
 
   // Inline function to update date state
-  const handleDateChange = (e) => {
+  const handleDateChange = (e:any) => {
     setDate(e.target.value);
   };
 
   // Inline function to update engine level state
-  const handleEngineLevelChange = (e) => {
+  const handleEngineLevelChange = (e:any) => {
     setEngineLevel(e.target.value);
   };
 
   // Inline function to update engine fixed state
-  const handleEngineFixedChange = (value) => {
+  const handleEngineFixedChange = (value:any) => {
     setIsEngineFixed(value);
   };
 

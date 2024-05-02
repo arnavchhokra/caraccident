@@ -26,6 +26,11 @@ import CryptoJS from 'crypto-js';
 
 
 function Page() {
+
+  interface WindowWithEthereum extends Window {
+    ethereum?: any;
+    }
+
   const [isEncrypt, setIsEncrypt] = useState(false); // State to track encryption status
   const [password, setPassword] = useState(''); // State to track password value
   const [ownerName, setOwnerName] = useState(''); // State to track owner name value
@@ -95,22 +100,22 @@ function Page() {
 
 
   // Handler to update encryption state
-  const handleEncrypt = (value) => {
+  const handleEncrypt = (value:any) => {
     setIsEncrypt(value === "1");
   };
 
   // Inline function to update password state
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e:any) => {
     setPassword(e.target.value);
   };
 
   // Inline function to update owner name state
-  const handleOwnerNameChange = (e) => {
+  const handleOwnerNameChange = (e:any) => {
     setOwnerName(e.target.value);
   };
 
   // Inline function to update car name state
-  const handleCarNameChange = (e) => {
+  const handleCarNameChange = (e:any) => {
     setCarName(e.target.value);
   };
 

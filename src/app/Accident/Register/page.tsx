@@ -19,22 +19,27 @@ import ABI from "../../../ABI.json";
 
 
 function Page() {
+
+  interface WindowWithEthereum extends Window {
+    ethereum?: any;
+    }
+
   const [vehicleID, setVehicleID] = useState(''); // State to track vehicle ID value
   const [accidentDate, setAccidentDate] = useState(''); // State to track accident date value
   const [damage, setDamage] = useState(''); // State to track damage description
 
   // Inline function to update vehicle ID state
-  const handleVehicleIDChange = (e) => {
+  const handleVehicleIDChange = (e:any) => {
     setVehicleID(e.target.value);
   };
 
   // Inline function to update accident date state
-  const handleAccidentDateChange = (e) => {
+  const handleAccidentDateChange = (e:any) => {
     setAccidentDate(e.target.value);
   };
 
   // Inline function to update damage description state
-  const handleDamageChange = (e) => {
+  const handleDamageChange = (e:any) => {
     setDamage(e.target.value);
   };
 

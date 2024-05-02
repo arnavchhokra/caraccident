@@ -49,7 +49,7 @@ function Navbar() {
   const [carID, setCarID] = useState(''); // State to track car ID value
 
 
-  const handleCarIDChange = (e) => {
+  const handleCarIDChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCarID(e.target.value);
   };
 
@@ -57,9 +57,9 @@ function Navbar() {
     setUserName(event.target.value);
   };
 
-  const handleUserTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-	setUserType(Number(event.target.value));
-  };
+  const handleUserTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setUserType(Number(e.target.value));
+};
 
   const handleEmergencyContactChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     setEmergencyContact(event.target.value);
