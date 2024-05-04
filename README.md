@@ -12,7 +12,6 @@ This Next.js project integrates with an Ethereum smart contract deployed on the 
 nextjs-project/
 |-- src/
 |   |-- app/
-|   |   |-- index.js
 |   |   |-- vehicle/
 |   |   |-- service/
 |   |   |-- accident/
