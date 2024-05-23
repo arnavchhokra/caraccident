@@ -19,19 +19,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
 import Web3 from 'web3';
 import ABI from "../../../ABI.json";
 
 
+
 function Page() {
+
   interface WindowWithEthereum extends Window {
     ethereum?: any;
     }
 
   const [carID, setCarID] = useState(''); // State to track car ID value
   const [date, setDate] = useState(''); // State to track date value
-  const [level, setLevel] = useState(''); // State to track battery level value
-  const [isBatteryFixed, setIsBatteryFixed] = useState(''); // State to track battery fixed status
+  const [engineLevel, setEngineLevel] = useState(''); // State to track engine level value
+  const [isEngineFixed, setIsEngineFixed] = useState(''); // State to track engine fixed status
 
   // Inline function to update car ID state
   const handleCarIDChange = (e:any) => {
@@ -43,19 +46,21 @@ function Page() {
     setDate(e.target.value);
   };
 
-  // Inline function to update level state
-  const handleLevelChange = (e:any) => {
-    setLevel(e.target.value);
+  // Inline function to update engine level state
+  const handleEngineLevelChange = (e:any) => {
+    setEngineLevel(e.target.value);
   };
 
-  // Inline function to update battery fixed state
-  const handleBatteryFixedChange = (value:any) => {
-    setIsBatteryFixed(value);
+  // Inline function to update engine fixed state
+  const handleEngineFixedChange = (value:any) => {
+    setIsEngineFixed(value);
   };
+
+
 
   const [web3, setWeb3] = useState<Web3 | null>(null);
 
-  const contractAddress = "0x4c304df050df16ee92ef5037290c10cd19f35128";
+  const contractAddress = "0x716493eb2356272d642e58dff2c877cd020e664a";
 
 
 	  const register = async() =>{
@@ -72,8 +77,8 @@ function Page() {
 			contractAddress
 		  );
 		  try{
-        const regis = await contra.methods.setBatteryService(carID, date, level, isBatteryFixed).send({ from: accounts[0]});
-      alert('Battery registered')
+        const regis = await contra.methods.setEngineService(carID, date, engineLevel, isEngineFixed).send({ from: accounts[0]});
+      alert('Engine registered')
 		  }catch(e)
 		  {
 			alert(e)
@@ -89,13 +94,15 @@ function Page() {
 
 
 
+
+
   // Log every state
   useEffect(() => {
     console.log("carID:", carID);
     console.log("date:", date);
-    console.log("level:", level);
-    console.log("isBatteryFixed:", isBatteryFixed);
-  }, [carID, date, level, isBatteryFixed]);
+    console.log("engineLevel:", engineLevel);
+    console.log("isEngineFixed:", isEngineFixed);
+  }, [carID, date, engineLevel, isEngineFixed]);
 
   return (
     <div>
@@ -104,7 +111,7 @@ function Page() {
         <div style ={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'left', height:'80vh', width:'330px', gap:'10px', }}>
           <Card className="w-[350px]  items-center">
             <CardHeader>
-              <CardTitle>Battery Service</CardTitle>
+              <CardTitle>Service Engine</CardTitle>
               <CardDescription>Service your new car in one-click.</CardDescription>
             </CardHeader>
             <CardContent>
@@ -123,24 +130,24 @@ function Page() {
                     <Label htmlFor="date">Date</Label>
                     <Input
                       id="date"
-                      placeholder="Date of Service"
+                      placeholder="Date of the Service"
                       value={date}
                       onChange={handleDateChange}
                     />
                   </div>
                   <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="level">Level</Label>
+                    <Label htmlFor="engineLevel">Engine Level</Label>
                     <Input
-                      id="level"
-                      placeholder="Battery Level (1-5)"
-                      value={level}
-                      onChange={handleLevelChange}
+                      id="engineLevel"
+                      placeholder="Level of the Engine (1-5)"
+                      value={engineLevel}
+                      onChange={handleEngineLevelChange}
                     />
                   </div>
                   <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="framework">Is Battery Fixed?</Label>
-                    <Select onValueChange={handleBatteryFixedChange}>
-                      <SelectTrigger id="framework">
+                    <Label htmlFor="isEngineFixed">Is Engine Fixed?</Label>
+                    <Select onValueChange={handleEngineFixedChange}>
+                      <SelectTrigger id="isEngineFixed">
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent position="popper">

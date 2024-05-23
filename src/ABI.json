@@ -1,18 +1,54 @@
 [
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_quality",
+				"type": "string"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_fertilizerType",
+				"type": "uint8"
+			}
+		],
+		"name": "addFertilizer",
+		"outputs": [],
 		"stateMutability": "nonpayable",
-		"type": "constructor"
+		"type": "function"
 	},
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "_fertilizerID",
+				"type": "uint256"
+			}
+		],
+		"name": "receiveFertilizer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fertilizerID",
+				"type": "uint256"
+			},
+			{
 				"internalType": "string",
-				"name": "_password",
+				"name": "_description",
 				"type": "string"
 			}
 		],
-		"name": "approveProvider",
+		"name": "registerComplaint",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -21,11 +57,21 @@
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_user",
+				"name": "_address",
 				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_stakeholderNo",
+				"type": "uint8"
 			}
 		],
-		"name": "blacklistProvider",
+		"name": "registerStakeholder",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -34,15 +80,69 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "_carId",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
 				"type": "uint256"
 			}
 		],
-		"name": "checkEncryption",
+		"name": "checkpoints",
 		"outputs": [
 			{
-				"internalType": "bool",
+				"internalType": "uint256",
+				"name": "fertilizerID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "checkpointAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "enum SupplyChain.StakeholderType",
+				"name": "checkpointType",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
 				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "complaints",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "fertilizerID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "complainant",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "resolved",
 				"type": "bool"
 			}
 		],
@@ -50,13 +150,39 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "checkUser",
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "fertilizers",
 		"outputs": [
 			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "quality",
+				"type": "string"
+			},
+			{
+				"internalType": "enum SupplyChain.FertilizerType",
+				"name": "fertilizerType",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -66,80 +192,36 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "_carID",
+				"name": "_fertilizerID",
 				"type": "uint256"
 			}
 		],
-		"name": "decrypt",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_carId",
-				"type": "uint256"
-			}
-		],
-		"name": "getAccidentHistory",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "accidentDate",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "partsBroken",
-						"type": "string"
-					}
-				],
-				"internalType": "struct carAccident.Accident[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getAllCars",
+		"name": "getComplaints",
 		"outputs": [
 			{
 				"components": [
 					{
 						"internalType": "uint256",
-						"name": "carID",
+						"name": "fertilizerID",
 						"type": "uint256"
 					},
 					{
 						"internalType": "string",
-						"name": "ownerName",
+						"name": "description",
 						"type": "string"
 					},
 					{
-						"internalType": "string",
-						"name": "carName",
-						"type": "string"
+						"internalType": "address",
+						"name": "complainant",
+						"type": "address"
 					},
 					{
 						"internalType": "bool",
-						"name": "isEncrypted",
+						"name": "resolved",
 						"type": "bool"
 					}
 				],
-				"internalType": "struct carAccident.Car[]",
+				"internalType": "struct SupplyChain.Complaint[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -151,31 +233,70 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "_carId",
+				"name": "_id",
 				"type": "uint256"
 			}
 		],
-		"name": "getBatteryService",
+		"name": "getFertilizerDetails",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "enum SupplyChain.FertilizerType",
+				"name": "",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getHistory",
 		"outputs": [
 			{
 				"components": [
 					{
-						"internalType": "string",
-						"name": "serviceDate",
-						"type": "string"
-					},
-					{
 						"internalType": "uint256",
-						"name": "batteryScale",
+						"name": "fertilizerID",
 						"type": "uint256"
 					},
 					{
-						"internalType": "bool",
-						"name": "isFixed",
-						"type": "bool"
+						"internalType": "address",
+						"name": "checkpointAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "enum SupplyChain.StakeholderType",
+						"name": "checkpointType",
+						"type": "uint8"
 					}
 				],
-				"internalType": "struct carAccident.Battery[]",
+				"internalType": "struct SupplyChain.Checkpoint[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -186,74 +307,22 @@
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "_ID",
-				"type": "uint256"
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
 			}
 		],
-		"name": "getCarByID",
+		"name": "getStakeholderDetails",
 		"outputs": [
 			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "carID",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "ownerName",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "carName",
-						"type": "string"
-					},
-					{
-						"internalType": "bool",
-						"name": "isEncrypted",
-						"type": "bool"
-					}
-				],
-				"internalType": "struct carAccident.Car",
+				"internalType": "string",
 				"name": "",
-				"type": "tuple"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getCarsByAddress",
-		"outputs": [
+				"type": "string"
+			},
 			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "carID",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "ownerName",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "carName",
-						"type": "string"
-					},
-					{
-						"internalType": "bool",
-						"name": "isEncrypted",
-						"type": "bool"
-					}
-				],
-				"internalType": "struct carAccident.Car[]",
+				"internalType": "enum SupplyChain.StakeholderType",
 				"name": "",
-				"type": "tuple[]"
+				"type": "uint8"
 			}
 		],
 		"stateMutability": "view",
@@ -261,296 +330,26 @@
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_carId",
-				"type": "uint256"
-			}
-		],
-		"name": "getEngineService",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "serviceDate",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "engineScale",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "isFixed",
-						"type": "bool"
-					}
-				],
-				"internalType": "struct carAccident.Engine[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_carId",
-				"type": "uint256"
-			}
-		],
-		"name": "getServiceHistory",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "serviceDate",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "serviceScale",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "partsServiced",
-						"type": "string"
-					},
-					{
-						"internalType": "bool",
-						"name": "isDrivable",
-						"type": "bool"
-					},
-					{
-						"internalType": "string",
-						"name": "explainService",
-						"type": "string"
-					}
-				],
-				"internalType": "struct carAccident.Service[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
 			{
 				"internalType": "address",
 				"name": "",
 				"type": "address"
 			}
 		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_carId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "_accidentDate",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_partsBroken",
-				"type": "string"
-			}
-		],
-		"name": "registerAccident",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_ownerName",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_carName",
-				"type": "string"
-			},
-			{
-				"internalType": "bool",
-				"name": "_isEncrypted",
-				"type": "bool"
-			}
-		],
-		"name": "registerCar",
+		"name": "stakeholders",
 		"outputs": [
 			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "enum SupplyChain.StakeholderType",
+				"name": "stakeholderType",
+				"type": "uint8"
 			}
 		],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_userName",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "no",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "_emergency",
-				"type": "string"
-			}
-		],
-		"name": "registerUser",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_carId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "_serviceDate",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_level",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "_partsFixed",
-				"type": "string"
-			},
-			{
-				"internalType": "bool",
-				"name": "_isDriveable",
-				"type": "bool"
-			},
-			{
-				"internalType": "string",
-				"name": "_explainService",
-				"type": "string"
-			}
-		],
-		"name": "setBasicService",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_carId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "_date",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_level",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "_isfixed",
-				"type": "bool"
-			}
-		],
-		"name": "setBatteryService",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_carId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "_serviceDate",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_level",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "_isfixed",
-				"type": "bool"
-			}
-		],
-		"name": "setEngineService",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_ID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_personalID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "_newOwner",
-				"type": "address"
-			}
-		],
-		"name": "tranferCar",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "withdraw",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	}
 ]

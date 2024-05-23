@@ -22,7 +22,6 @@ import {
 import { LucideScissorsSquareDashedBottom } from 'lucide-react';
 import Web3 from 'web3';
 import ABI from "../../../ABI.json";
-import CryptoJS from 'crypto-js';
 
 
 function Page() {
@@ -31,19 +30,16 @@ function Page() {
     ethereum?: any;
     }
 
-  const [isEncrypt, setIsEncrypt] = useState(false); // State to track encryption status
+  const [fertilizerType, setFertilizerType] = useState(false); // State to track encryption status
   const [password, setPassword] = useState(''); // State to track password value
-  const [ownerName, setOwnerName] = useState(''); // State to track owner name value
-  const [carName, setCarName] = useState(''); // State to track car name value
+  const [fertilizerQuantity, setFertilizerQuantity] = useState(0); // State to track owner name value
+  const [carName, setCarName] = useState(""); // State to track Fertilizer name value
 
 
 	const [web3, setWeb3] = useState<Web3 | null>(null);
 
-  const contractAddress = "0x4c304df050df16ee92ef5037290c10cd19f35128";
-
-
+  const contractAddress = "0x716493eb2356272d642e58dff2c877cd020e664a";
 	  const register = async() =>{
-
 		if (typeof window !== "undefined") {
 		  const win = window as WindowWithEthereum;
 		  if (win.ethereum) {
@@ -56,24 +52,8 @@ function Page() {
 			contractAddress
 		  );
 		  try{
-      if(isEncrypt)
-        {
-          const _owner = CryptoJS.AES.encrypt(ownerName, password).toString()
-          const _carName = CryptoJS.AES.encrypt(carName, password).toString()
-          console.log("hey encryption")
-          setOwnerName(_owner);
-          setCarName(_carName);
-          console.log(ownerName, carName)
-          setTimeout(async () => {
-            const regis = await contra.methods.registerCar(_owner, _carName, isEncrypt)
-              .send({ from: accounts[0], value: web3.utils.toWei('0.07', 'ether') });
-            alert('Car registered');
-          }, 10000);        }
-      else
-      {
-        const regis = await contra.methods.registerCar(ownerName,carName,isEncrypt).send({ from: accounts[0]});
-      }
-      alert('Car registered')
+      const regis = await contra.methods.registerStakeholder(accounts[0],carName,fertilizerType).send({ from: accounts[0]});
+      alert('Stakeholder registered')
 		  }catch(e)
 		  {
 			alert(e)
@@ -101,7 +81,7 @@ function Page() {
 
   // Handler to update encryption state
   const handleEncrypt = (value:any) => {
-    setIsEncrypt(value === "1");
+    setFertilizerType(value);
   };
 
   // Inline function to update password state
@@ -111,39 +91,22 @@ function Page() {
 
   // Inline function to update owner name state
   const handleOwnerNameChange = (e:any) => {
-    setOwnerName(e.target.value);
+    setFertilizerQuantity(e.target.value);
   };
 
-  // Inline function to update car name state
+  // Inline function to update Fertilizer name state
   const handleCarNameChange = (e:any) => {
     setCarName(e.target.value);
   };
 
-  // Function to render password input if encryption is set to true
-  const renderPasswordInput = () => {
-    if (isEncrypt) {
-      return (
-        <div className="flex flex-col space-y-1.5">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </div>
-      );
-    }
-    return null;
-  };
+
 
   useEffect(() => {
-    console.log("isEncrypt:", isEncrypt);
+    console.log("fertilizerType:", fertilizerType);
     console.log("password", password);
-    console.log("ownerName",ownerName)
-    console.log("carName", carName) // Log isEncrypt value to check if it changes
-  },[isEncrypt, password, ownerName, carName]);
+    console.log("fertilizerQuantity",fertilizerQuantity)
+    console.log("carName", carName) // Log fertilizerType value to check if it changes
+  },[fertilizerType, password, fertilizerQuantity, carName]);
 
   function submit()
   {
@@ -157,43 +120,37 @@ function Page() {
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', height: '80vh', width: '330px', gap: '10px' }}>
           <Card className="w-[350px] items-center">
             <CardHeader>
-              <CardTitle>Register Car</CardTitle>
-              <CardDescription>Register your new car in one-click.</CardDescription>
+              <CardTitle>Register Stakeholder</CardTitle>
+              <CardDescription>Register Stakeholder in one-click.</CardDescription>
             </CardHeader>
             <CardContent>
               <form>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="ownerName">Owner Name</Label>
+                <div className="flex flex-col space-y-1.5 mb-2">
+                  <Label htmlFor="fertilizerQuantity">Name of Stakeholder</Label>
                   <Input
-                    id="ownerName"
-                    placeholder="Name of the Owner"
-                    value={ownerName}
-                    onChange={handleOwnerNameChange}
+                    id="fertilizerQuality"
+                    placeholder="Name"
+                    value={carName}
+                    onChange={handleCarNameChange}
                   />
                 </div>
                 <div className="grid w-full items-center gap-4">
+
                   <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="name">Car Name</Label>
-                    <Input
-                      id="name"
-                      placeholder="Name of the Car"
-                      value={carName}
-                      onChange={handleCarNameChange}
-                    />
-                  </div>
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="encrypt">Encrypt it?</Label>
+                    <Label htmlFor="encrypt">Stakeholder Type</Label>
                     <Select onValueChange={handleEncrypt}>
                       <SelectTrigger id="encrypt">
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent position="popper">
-                        <SelectItem value="1">Yes</SelectItem>
-                        <SelectItem value="0">No</SelectItem>
+                        <SelectItem value="1">Manufaturer</SelectItem>
+                        <SelectItem value="2">Logistics</SelectItem>
+                        <SelectItem value="3">Distributor</SelectItem>
+                        <SelectItem value="4">Retailer</SelectItem>
+                        <SelectItem value="5">Farmer</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
-                  {renderPasswordInput()} {/* Render password input based on encryption status */}
                 </div>
               </form>
             </CardContent>

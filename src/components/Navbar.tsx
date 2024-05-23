@@ -70,6 +70,24 @@ function Navbar() {
   },[userName,userType,emergencyContact, carID])
 
 
+  useEffect(()=>{
+
+	const connector = async () => {
+		if (typeof window !== "undefined") {
+		  const win = window as WindowWithEthereum;
+		  if (win.ethereum) {
+		  await win.ethereum.enable();
+		  const web3 = new Web3(win.ethereum);
+		  setWeb3(web3);
+		  const accounts = await web3.eth.getAccounts();
+		  setaddress(accounts[0]);
+		  setConnectText(accounts[0].length > 3 ? accounts[0].substring(0, 3) + '...' : accounts[0]);
+		}
+	}
+}
+connector();
+
+  },[]);
 
 
   const contractAddress = "0x4c304df050df16ee92ef5037290c10cd19f35128";
@@ -136,54 +154,6 @@ function Navbar() {
 		}
 	  };
 
-	  const signup = async() =>{
-
-		if (typeof window !== "undefined") {
-		  const win = window as WindowWithEthereum;
-		  if (win.ethereum) {
-		  await win.ethereum.enable();
-		  const web3 = new Web3(win.ethereum);
-		  setWeb3(web3);
-		  const accounts = await web3.eth.getAccounts();
-		  const contra = new web3.eth.Contract(
-			ABI,
-			contractAddress
-		  );
-		  if(userType ==1)
-			{
-		  try{
-			const regis = await contra.methods
-			.registerUser(userName,userType,emergencyContact)
-			.send({ from: accounts[0] });
-			alert("User Registered");
-		  }catch(e)
-		  {
-			alert(e)
-		  }
-		}
-		else
-		{
-			try{
-				const regis = await contra.methods
-				.registerUser(userName,userType,emergencyContact)
-				.send({ from: accounts[0] });
-				const valid = await contra.methods.approveProvider(carID).send({ from: accounts[0]});
-				alert(" user Registered and Validated");
-			  }catch(e)
-			  {
-				alert(e)
-			  }
-		}
-		}
-			}
-
-		else{
-			alert('Connect Metamask')
-		}
-
-
-	  }
-
 	const renderLogin = async()=>
 	{
 		await connectToWeb3();
@@ -194,7 +164,7 @@ function Navbar() {
     <div>
 	<nav className="relative px-4 py-4 flex justify-between items-center bg-white">
 		<a  style={{width:'200px'}} className="text-2xl font-bold" href="/">
-			<h3>Wagon Finder</h3>
+			<h3>FSC</h3>
 		</a>
 		<div className="lg:hidden">
 			<button className="navbar-burger flex items-center text-blue-600 p-3">
@@ -206,12 +176,13 @@ function Navbar() {
 		</div>
 		<ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
 			<li><DropdownMenu>
-  <DropdownMenuTrigger className="text-sm text-gray-400 hover:text-gray-500">Vehicle</DropdownMenuTrigger>
+  <DropdownMenuTrigger className="text-sm text-gray-400 hover:text-gray-500">Fertilizer</DropdownMenuTrigger>
   <DropdownMenuContent>
     <DropdownMenuSeparator />
-    <DropdownMenuItem><a href = "/Vehicle/Register">Registration</a></DropdownMenuItem>
-	<DropdownMenuItem><a href = "/Vehicle/Transfer">Transfer</a></DropdownMenuItem>
-    <DropdownMenuItem><a href = "/Vehicle/View">My Vehicles</a></DropdownMenuItem>
+    <DropdownMenuItem><a href = "/Fertilizer/Register">Registration</a></DropdownMenuItem>
+    <DropdownMenuItem><a href = "/Fertilizer/Recieve">Recieve</a></DropdownMenuItem>
+	<DropdownMenuItem><a href = "/Fertilizer/View">Fertilizer History</a></DropdownMenuItem>
+
   </DropdownMenuContent>
 </DropdownMenu></li>
 			<li className="text-gray-300">
@@ -220,12 +191,10 @@ function Navbar() {
 				</svg>
 			</li>
 			<li><DropdownMenu>
-  <DropdownMenuTrigger className="text-sm text-gray-400 hover:text-gray-500">Service</DropdownMenuTrigger>
+  <DropdownMenuTrigger className="text-sm text-gray-400 hover:text-gray-500">StakeHolder</DropdownMenuTrigger>
   <DropdownMenuContent>
     <DropdownMenuSeparator />
-    <DropdownMenuItem><a href = "/Service/Battery">Service Battery</a></DropdownMenuItem>
-    <DropdownMenuItem><a href = "/Service/Engine">Service Engine</a></DropdownMenuItem>
-	<DropdownMenuItem><a href = "/Service/Basic">Basic Service </a></DropdownMenuItem>
+    <DropdownMenuItem><a href = "/Service/Register">Register</a></DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu></li>			<li className="text-gray-300">
 				<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" className="w-4 h-4 current-fill" viewBox="0 0 24 24">
@@ -233,86 +202,16 @@ function Navbar() {
 				</svg>
 			</li>
 			<li><DropdownMenu>
-  <DropdownMenuTrigger className="text-sm text-gray-400 hover:text-gray-500">Accident</DropdownMenuTrigger>
+  <DropdownMenuTrigger className="text-sm text-gray-400 hover:text-gray-500">Complaints</DropdownMenuTrigger>
   <DropdownMenuContent>
     <DropdownMenuSeparator />
-    <DropdownMenuItem><a href = "/Accident/Register">Register Accident </a></DropdownMenuItem>
+    <DropdownMenuItem><a href = "/Complaint/Register">Register </a></DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu></li>
 		</ul>
 		<div style={{width:'100vw', display:'flex', justifyContent:'flex-end', marginRight:'10px'}}>
 		<button  className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" onClick={connectWallet}>{connectText}</button>
 		</div>
-		<Dialog>
-		<DialogTrigger><a className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" onClick={renderLogin}>{loginText}</a>
-		</DialogTrigger>
-					{
-				checker? <DialogContent>
-					<DialogHeader>
-                        <DialogTitle>Welcome Back</DialogTitle>
-						<DialogDescription>
-				Perform vital operations in one click
-      </DialogDescription>
-                    </DialogHeader>
-					</DialogContent> : <DialogContent>
-					<DialogHeader>
-                        <DialogTitle>Signup</DialogTitle>
-						<DialogDescription>
-						<div className="flex flex-col space-y-1.5 mb-2">
-                    <Label htmlFor="vehicleID">Name</Label>
-                    <Input
-                       id="userName"
-					   type="text"
-					   placeholder="Name of the user"
-					   value={userName}
-					   onChange={handleUserNameChange}
-                    />
-                  </div>
-                  <div className="flex flex-col space-y-1.5 mb-2">
-    <Label htmlFor="accidentDate">Type</Label>
-    <select
-        id="userType"
-        value={userType}
-        onChange={handleUserTypeChange}
-        className="border border-gray-300 rounded-md p-1 "
-    >
-        <option value={1}>Owner</option>
-        <option value={2}>Garage</option>
-        <option value={3}>Accident Resolution Center</option>
-    </select>
-</div>
-                  <div className="flex flex-col space-y-1.5 mb-2">
-                    <Label htmlFor="damage">Emergency Contact</Label>
-                    <Input
-                      id="emergencyContact"
-					  type="text"
-					  placeholder="Emergency contact of the user"
-					  value={emergencyContact}
-					  onChange={handleEmergencyContactChange}
-                    />
-                  </div>
-				  {
-					userType==2 || userType==3?
-					<div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="damage">Approval Password</Label>
-                    <Input
-                      id="approvalPassword"
-					  type="text"
-					  placeholder="Approval Password by the owner"
-					  value={carID}
-                      onChange={handleCarIDChange}
-                    />
-                  </div>:
-				  <div></div>
-				  }
-      </DialogDescription>
-                    </DialogHeader>
-					<DialogFooter>
-					<Button onClick={signup}>Register</Button>
-					</DialogFooter>
-					</DialogContent>
-			}
-</Dialog>
 	</nav>
 
 	<div className="navbar-menu relative z-50 hidden">
